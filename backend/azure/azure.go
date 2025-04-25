@@ -17,7 +17,6 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 )
 
-// Resource 表示Azure资源的结构
 type Resource struct {
 	Name     string            `json:"name"`
 	ID       string            `json:"id"`
@@ -27,7 +26,6 @@ type Resource struct {
 	Tags     map[string]string `json:"tags"`
 }
 
-// VMResource 表示Azure虚拟机资源
 type VMResource struct {
 	Name     string            `json:"name"`
 	ID       string            `json:"id"`
@@ -38,7 +36,6 @@ type VMResource struct {
 	Tags     map[string]string `json:"tags"`
 }
 
-// DBResource 表示Azure数据库资源
 type DBResource struct {
 	Name     string            `json:"name"`
 	ID       string            `json:"id"`
