@@ -1,15 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/ResourceList.css';
+import 'boxicons/css/boxicons.min.css';
 
-const ResourceList = () => {
+const ResourceList = ({ resourceType = 'vm' }) => {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchResources = async () => {
+      setLoading(true);
       try {
-        const response = await fetch('http://localhost:8080/api/resources');
+        let endpoint = '/api/vms';
+        
+        // 根据资源类型选择不同的API端点
+        switch(resourceType) {
+          case 'sqldatabase':
+            endpoint = '/api/sqldatabases';
+            break;
+          case 'mysqlflexible':
+            endpoint = '/api/mysqlflexible';
+            break;
+          case 'sqlserver':
+            endpoint = '/api/sqlservers';
+            break;
+          case 'database': // 保留原有的数据库类型（向后兼容）
+            endpoint = '/api/databases';
+            break;
+          default:
+            endpoint = '/api/vms';
+        }
+        
+        const response = await fetch(`http://localhost:8080${endpoint}`);
         if (!response.ok) {
           throw new Error(`请求失败: ${response.status}`);
         }
@@ -23,48 +45,148 @@ const ResourceList = () => {
     };
 
     fetchResources();
-  }, []);
+  }, [resourceType]);
 
   if (loading) {
-    return <div className="loading">加载中...</div>;
+    return <div className="loading">loading...</div>;
   }
 
   if (error) {
-    return <div className="error">错误: {error}</div>;
+    return <div className="error">error: {error}</div>;
   }
+
+  const renderTableHeaders = () => {
+    // 根据资源类型渲染不同的表头
+    switch(resourceType) {
+      case 'sqldatabase':
+        return (
+          <tr>
+            <th>Name</th>
+            <th>Sub ID</th>
+            <th>Location</th>
+            <th>Resource Group</th>
+            <th>Status</th>
+            <th>IT Owner</th>
+          </tr>
+        );
+      case 'mysqlflexible':
+        return (
+          <tr>
+            <th>Name</th>
+            <th>Sub ID</th>
+            <th>Location</th>
+            <th>Version</th>
+            <th>Status</th>
+            <th>IT Owner</th>
+          </tr>
+        );
+      case 'sqlserver':
+        return (
+          <tr>
+            <th>Name</th>
+            <th>Sub ID</th>
+            <th>Location</th>
+            <th>Version</th>
+            <th>Status</th>
+            <th>IT Owner</th>
+          </tr>
+        );
+      case 'database': // 保留原有的数据库类型（向后兼容）
+        return (
+          <tr>
+            <th>Name</th>
+            <th>Sub ID</th>
+            <th>Location</th>
+            <th>IT Owner</th>
+          </tr>
+        );
+      default:
+        return (
+          <tr>
+            <th>Name</th>
+            <th>Sub ID</th>
+            <th>Location</th>
+            <th>OS Type</th>
+            <th>IT Owner</th>
+          </tr>
+        );
+    }
+  };
+
+  const renderTableRows = () => {
+    return resources.map((resource) => {
+      // 根据资源类型渲染不同的表格行
+      switch(resourceType) {
+        case 'sqldatabase':
+          return (
+            <tr key={resource.id}>
+              <td>{resource.name}</td>
+              <td>{resource.id}</td>
+              <td>{resource.location}</td>
+              <td>{resource.server || '未指定'}</td>
+              <td>{resource.status || '未知'}</td>
+              <td>{resource.owner || '未指定'}</td>
+            </tr>
+          );
+        case 'mysqlflexible':
+          return (
+            <tr key={resource.id}>
+              <td>{resource.name}</td>
+              <td>{resource.id}</td>
+              <td>{resource.location}</td>
+              <td>{resource.version || '未指定'}</td>
+              <td>{resource.status || '未知'}</td>
+              <td>{resource.owner || '未指定'}</td>
+            </tr>
+          );
+        case 'sqlserver':
+          return (
+            <tr key={resource.id}>
+              <td>{resource.name}</td>
+              <td>{resource.id}</td>
+              <td>{resource.location}</td>
+              <td>{resource.version || '未指定'}</td>
+              <td>{resource.status || '未知'}</td>
+              <td>{resource.owner || '未指定'}</td>
+            </tr>
+          );
+        case 'database': // 保留原有的数据库类型（向后兼容）
+          return (
+            <tr key={resource.id}>
+              <td>{resource.name}</td>
+              <td>{resource.id}</td>
+              <td>{resource.location}</td>
+              <td>{resource.owner || '未指定'}</td>
+            </tr>
+          );
+        default:
+          return (
+            <tr key={resource.id}>
+              <td>{resource.name}</td>
+              <td>{resource.id}</td>
+              <td>{resource.location}</td>
+              <td>{resource.size || '未指定'}</td>
+              <td>{resource.owner || '未指定'}</td>
+            </tr>
+          );
+      }
+    });
+  };
 
   return (
     <div className="resource-list-container">
-      <h1>Azure 资源列表</h1>
       <div className="resource-list">
         {resources.length === 0 ? (
           <p>没有找到资源</p>
         ) : (
-          resources.map((resource) => (
-            <div className="resource-card" key={resource.id}>
-              <h2>{resource.name}</h2>
-              <div className="resource-details">
-                <p><strong>资源ID:</strong> {resource.id}</p>
-                <p><strong>位置:</strong> {resource.location}</p>
-                <p><strong>所有者:</strong> {resource.owner || '未指定'}</p>
-                <p><strong>类型:</strong> {resource.type}</p>
-              </div>
-              <div className="resource-tags">
-                <h3>标签:</h3>
-                {Object.keys(resource.tags).length > 0 ? (
-                  <ul>
-                    {Object.entries(resource.tags).map(([key, value]) => (
-                      <li key={key}>
-                        <strong>{key}:</strong> {value}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>无标签</p>
-                )}
-              </div>
-            </div>
-          ))
+          <table className="resource-table">
+            <thead>
+              {renderTableHeaders()}
+            </thead>
+            <tbody>
+              {renderTableRows()}
+            </tbody>
+          </table>
         )}
       </div>
     </div>

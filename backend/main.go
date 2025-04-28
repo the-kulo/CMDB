@@ -31,16 +31,6 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	// API路由
-	r.GET("/api/resources", func(c *gin.Context) {
-		resources, err := azure.GetAzureResources()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusOK, resources)
-	})
-
 	// 虚拟机资源API路由
 	r.GET("/api/vms", func(c *gin.Context) {
 		vms, err := azure.GetAzureVirtualMachines()
@@ -49,6 +39,47 @@ func main() {
 			return
 		}
 		c.JSON(http.StatusOK, vms)
+	})
+
+	// SQL数据库资源API路由
+	r.GET("/api/sqldatabases", func(c *gin.Context) {
+		databases, err := azure.GetAzureSQLDatabases()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, databases)
+	})
+
+	// MySQL灵活服务器资源API路由
+	r.GET("/api/mysqlflexible", func(c *gin.Context) {
+		servers, err := azure.GetAzureMySQLFlexibleServers()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, servers)
+	})
+
+	// SQL服务器资源API路由
+	r.GET("/api/sqlservers", func(c *gin.Context) {
+		servers, err := azure.GetAzureSQLServers()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, servers)
+	})
+
+	// 保留原有的数据库API路由（向后兼容）
+	r.GET("/api/databases", func(c *gin.Context) {
+
+		databases, err := azure.GetAzureDatabases()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, databases)
 	})
 
 	// 启动服务器

@@ -7,41 +7,216 @@
 
 .App-header {
   background-color: #0078d4;
-  padding: 20px;
+  padding: 5px;
   color: white;
-  margin-bottom: 20px;
+  margin-bottom: 0;
+  font-style: italic;
 }
 
 .App-header h1 {
   margin: 0;
   font-size: 2rem;
+  text-align: left;
 }
 
-.App-header p {
-  margin: 10px 0 0;
-  font-size: 1.2rem;
-  opacity: 0.9;
-}
-
-main {
+.App-container {
+  display: flex;
   flex: 1;
-  padding: 0 20px;
 }
 
-footer {
+.App-sidebar {
+  width: 250px;
   background-color: #f0f0f0;
-  padding: 15px;
-  margin-top: 30px;
+  border-right: 1px solid #ddd;
+  padding: 20px 0;
+}
+
+.App-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.App-sidebar li {
+  margin-bottom: 10px;
+}
+
+.App-sidebar li button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 1rem;
   color: #333;
+  transition: all 0.2s;
+}
+
+.App-sidebar li.active button {
+  background-color: #0078d4;
+  color: white;
+  font-weight: bold;
+}
+
+.App-sidebar li button:hover {
+  background-color: #e0e0e0;
+}
+
+.App-sidebar li.active button:hover {
+  background-color: #0078d4;
+}
+
+.App-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: flex-end;
+}
+
+.search-box input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px 0 0 4px;
+  font-size: 0.9rem;
+  width: 250px;
+}
+
+.search-box button {
+  padding: 8px 12px;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
   font-size: 0.9rem;
 }
 
 @media (max-width: 768px) {
-  .App-header h1 {
-    font-size: 1.5rem;
+  .App-container {
+    flex-direction: column;
   }
   
-  .App-header p {
-    font-size: 1rem;
+  .App-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
   }
+  
+  .App-sidebar ul {
+    display: flex;
+    overflow-x: auto;
+  }
+  
+  .App-sidebar li {
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+  
+  .search-box {
+    width: 100%;
+  }
+  
+  .search-box input {
+    flex: 1;
+  }
+}
+
+.resource-container {
+  width: 100%;
+}
+
+.resource-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.resource-tabs button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+  margin-right: 10px;
+  border-bottom: 3px solid transparent;
+}
+
+.resource-tabs button.active {
+  color: #0078d4;
+  border-bottom: 3px solid #0078d4;
+  font-weight: bold;
+}
+
+.resource-tabs button:hover {
+  color: #0078d4;
+}
+
+.select-menu {
+  width: 230px;
+  margin: 20px auto;
+  position: relative;
+}
+
+.select-btn {
+  display: flex;
+  height: 40px;
+  background: #fff;
+  padding: 0 15px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 4px;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.select-btn i {
+  font-size: 30px;
+  transition: 0.3s;
+}
+
+.select-menu .options {
+  position: absolute;
+  width: 100%;
+  padding: 10px 0;
+  margin-top: 10px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 100;
+}
+
+.select-menu .options.active {
+  display: block;
+}
+
+.options li {
+  height: 40px;
+  padding: 0 15px;
+  font-size: 16px;
+  font-weight: 400;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.options li:hover, .options li.selected {
+  background: #f2f2f2;
+}
+
+.options li.selected {
+  color: #0078d4;
+  font-weight: 500;
 }
