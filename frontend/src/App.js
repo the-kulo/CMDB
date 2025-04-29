@@ -26,11 +26,11 @@ function App() {
 
   const selectOption = (option) => {
     setActiveTab(option.toLowerCase());
-    // setIsOpen(false);
   };
 
   const renderContent = () => {
-    return <ResourceList resourceType={activeTab} />;
+    let resourceTypeForList = activeTab;
+    return <ResourceList resourceType={resourceTypeForList} />;
   };
 
   return (
@@ -42,7 +42,14 @@ function App() {
         <nav className="App-sidebar">
           <div className="select-menu" ref={dropdownRef}>
             <div className="select-btn" onClick={toggleDropdown}>
-              <span>Resource List</span>
+              {/* 根据 activeTab 显示当前选中的资源类型名称 */}
+              <span>
+                {activeTab === 'vm' && 'VM'}
+                {activeTab === 'sqldatabase' && 'SQL Database'}
+                {activeTab === 'sqlserver' && 'SQL Server'}
+                {activeTab === 'mysqlflexible' && 'MySQL Flexible Server'}
+                {!['vm', 'sqldatabase', 'sqlserver', 'mysqlflexible'].includes(activeTab) && 'Resource List'}
+              </span>
               <i className={`bx ${isOpen ? 'bx-chevron-up' : 'bx-chevron-down'}`}></i>
             </div>
             <ul className={`options ${isOpen ? 'active' : ''}`}>

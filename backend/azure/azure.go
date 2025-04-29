@@ -35,19 +35,20 @@ type VMResource struct {
 	ID       string            `json:"id"`
 	Location string            `json:"location"`
 	Owner    string            `json:"owner"`
-	Size     string            `json:"size,omitempty"`
+	Type     string            `json:"type,omitempty"`
 	Status   string            `json:"status,omitempty"`
 	Tags     map[string]string `json:"tags"`
 }
 
 // Azure数据库
+// DBResource 表示Azure数据库资源
 type DBResource struct {
 	Name     string            `json:"name"`
 	ID       string            `json:"id"`
 	Location string            `json:"location"`
 	Owner    string            `json:"owner"`
 	Server   string            `json:"server,omitempty"`
-	DBType   string            `json:"dbType,omitempty"`
+	DBType   string            `json:"db_type,omitempty"`
 	Version  string            `json:"version,omitempty"`
 	Status   string            `json:"status,omitempty"`
 	Tags     map[string]string `json:"tags"`
@@ -168,10 +169,10 @@ func (a *AzureHelper) GetResources() ([]Resource, error) {
 
 			resource := Resource{
 				Name:     *item.Name,
-				ID:       strings.Split(*item.ID, "/")[2],
+				ID:       *item.ID,
 				Location: *item.Location,
 				Owner:    owner,
-				Type:     strings.Split(*item.Type, "/")[len(strings.Split(*item.Type, "/"))-1],
+				Type:     *item.Type,
 				Tags:     make(map[string]string),
 			}
 
@@ -239,10 +240,10 @@ func (a *AzureHelper) GetVirtualMachines() ([]VMResource, error) {
 
 			vmResource := VMResource{
 				Name:     *vm.Name,
-				ID:       strings.Split(*vm.ID, "/")[2],
+				ID:       *vm.ID,
 				Location: *vm.Location,
 				Owner:    owner,
-				Size:     osType,
+				Type:     osType,
 				Status:   status,
 				Tags:     make(map[string]string),
 			}
@@ -321,7 +322,7 @@ func (a *AzureHelper) GetSQLDatabases() ([]DBResource, error) {
 
 					sqlDatabases = append(sqlDatabases, DBResource{
 						Name:     *db.Name,
-						ID:       strings.Split(*db.ID, "/")[2],
+						ID:       *db.ID,
 						Location: *db.Location,
 						Owner:    owner,
 						Server:   serverName,
@@ -383,7 +384,7 @@ func (a *AzureHelper) GetMySQLFlexibleServers() ([]DBResource, error) {
 
 			mysqlServers = append(mysqlServers, DBResource{
 				Name:     *srv.Name,
-				ID:       strings.Split(*srv.ID, "/")[2],
+				ID:       *srv.ID,
 				Location: *srv.Location,
 				Owner:    owner,
 				DBType:   "MySQL Flexible Server",
@@ -438,7 +439,7 @@ func (a *AzureHelper) GetSQLServers() ([]DBResource, error) {
 
 			sqlServers = append(sqlServers, DBResource{
 				Name:     *srv.Name,
-				ID:       strings.Split(*srv.ID, "/")[2],
+				ID:       *srv.ID,
 				Location: *srv.Location,
 				Owner:    owner,
 				DBType:   "SQL Server",
