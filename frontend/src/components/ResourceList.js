@@ -33,7 +33,7 @@ const ResourceList = ({ resourceType = 'vm' }) => {
             break;
         }
 
-        const response = await fetch(`http://localhost:8080${endpoint}`);
+        const response = await fetch(`${endpoint}`);
         if (!response.ok) {
           const errorData = await response.text(); // 获取错误详情
           throw new Error(`请求失败: ${response.status} - ${errorData}`);
